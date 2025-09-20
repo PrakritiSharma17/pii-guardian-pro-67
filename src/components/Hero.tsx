@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Shield, FileCheck, Lock, Zap } from "lucide-react";
+import { AuthModal } from "@/components/auth/AuthModal";
+import { useState } from "react";
 import heroImage from "@/assets/hero-security.jpg";
 
 export const Hero = () => {
+  const [authModalOpen, setAuthModalOpen] = useState(false);
   return (
     <section className="relative min-h-screen bg-gradient-hero overflow-hidden">
       {/* Background decoration */}
@@ -29,14 +32,14 @@ export const Hero = () => {
               
               <p className="text-xl text-blue-100 leading-relaxed max-w-lg">
                 AI-powered platform that automatically detects, redacts, and pseudonymizes PII from any document. 
-                HIPAA/GDPR compliant with advanced OCR and NLP capabilities.
+                HIPAA/GDPR compliant with advanced OCR and NLP capabilities. <strong>Free for everyone, enhanced access for government.</strong>
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button variant="hero" size="lg" className="text-lg px-8 py-6 h-auto">
+              <Button variant="hero" size="lg" className="text-lg px-8 py-6 h-auto" onClick={() => setAuthModalOpen(true)}>
                 <Zap className="w-5 h-5 mr-2" />
-                Start Free Trial
+                Get Free Access
               </Button>
               <Button variant="outline" size="lg" className="text-lg px-8 py-6 h-auto bg-white/10 border-white/30 text-white hover:bg-white/20">
                 <FileCheck className="w-5 h-5 mr-2" />
@@ -74,6 +77,14 @@ export const Hero = () => {
           </div>
         </div>
       </div>
+
+      <AuthModal 
+        isOpen={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={() => {
+          // Refresh will happen automatically via auth state change
+        }}
+      />
     </section>
   );
 };
