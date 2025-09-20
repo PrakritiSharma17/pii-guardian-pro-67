@@ -1,73 +1,135 @@
-# Welcome to your Lovable project
+# 🔒 PII Redaction System
 
-## Project info
+## 📌 Overview
 
-**URL**: https://lovable.dev/projects/9095eced-30f1-4f5a-9750-d3c77d59877c
+This project focuses on **automated redaction of sensitive information (PII)** in scanned, multi-page documents (PDF, JPG, PNG). Manual redaction is error-prone and tedious; our system ensures **accurate, secure, and layout-preserving redaction** powered by AI/ML.
 
-## How can I edit this code?
+The solution is designed for governments, legal teams, hospitals, insurers, and researchers who handle sensitive data daily.
 
-There are several ways of editing your application.
 
-**Use Lovable**
+## 🚀 Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9095eced-30f1-4f5a-9750-d3c77d59877c) and start prompting.
+* 📄 Supports **PDF, JPG, and PNG** input formats.
+* 🔍 Detects and removes **PII** including:
 
-Changes made via Lovable will be committed automatically to this repo.
+  * Names
+  * Contact details
+  * Dates & IDs
+  * Barcodes & QR codes
+  * Photos & handwriting
+* 🤖 AI-powered OCR with **Tesseract** and **Google Vision API**.
+* 🧠 PII detection using **BERT**, **spaCy**, and **AES-based models**.
+* 🖼️ **Layout preservation** — redaction maintains the original document structure.
+* 📝 Outputs:
 
-**Use your preferred IDE**
+  * Redacted document
+  * JSON/CSV structured log of all redactions
+* 🌍 **Multilingual OCR** support.
+* 🖥️ Interfaces:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+  * Simple **drag-and-drop web UI**
+  * **CLI mode** for bulk processing
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Follow these steps:
+## 🏗️ Architecture
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+**Workflow Pipeline**
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. **OCR Layer** → Tesseract / Google Vision extracts text.
+2. **PII Detection** → AES + NLP models (BERT, spaCy) identify sensitive entities.
+3. **Visual PII Detection** → YOLOv8 handles barcodes, faces, handwritten notes.
+4. **Redaction Engine** → Secure AES-based cleaning + layout preservation.
+5. **Output Layer** → Produces redacted file + structured logs.
 
-# Step 3: Install the necessary dependencies.
-npm i
+**Unique Selling Point (USP):**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+* AES not only conceals but **fully erases PII**.
+* Works with **typed + handwritten + multi-page** documents.
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📊 Data & Model Approach
 
-**Use GitHub Codespaces**
+* **Datasets:**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+  * Artificial & annotated PII samples
+  * Resource Center datasets with diverse document layouts
+* **Training Strategy:**
 
-## What technologies are used for this project?
+  * Adapt models to multiple layouts & formats
+  * Continuous feedback loop for AES adjustments
 
-This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## ⚙️ Tech Stack
 
-## How can I deploy this project?
+* **OCR:** Tesseract, Google Vision API
+* **NLP:** BERT, spaCy
+* **Visual Detection:** YOLOv8
+* **Document Layout Models:** Donut, LayoutLMv3
+* **Encryption & Redaction:** AES
 
-Simply open [Lovable](https://lovable.dev/projects/9095eced-30f1-4f5a-9750-d3c77d59877c) and click on Share -> Publish.
 
-## Can I connect a custom domain to my Lovable project?
+## 🖥️ Installation & Usage
 
-Yes, you can!
+### Prerequisites
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+* Python ≥ 3.9
+* Node.js ≥ 16 (for web UI)
+* API keys (Google Vision, if used)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Installation
+
+bash
+# Clone repository
+git clone https://github.com/your-username/pii-redaction-system.git
+cd pii-redaction-system
+
+# Install backend dependencies
+pip install -r requirements.txt
+
+# Install frontend dependencies
+cd ui
+npm install
+
+
+### Running Locally
+
+
+# Run backend
+python app.py
+
+# Run frontend
+cd ui
+npm start
+
+### Usage
+
+* **Web UI:** Drag & drop documents → Get redacted files + logs.
+* **CLI Mode:**
+
+  
+  python redact.py input.pdf --output redacted.pdf --log redacted.json
+  
+## 🎯 Target Users
+
+* **Government agencies** (secure citizen data)
+* **Legal teams** (contracts, case files)
+* **Hospitals & Insurers** (medical records, claim forms)
+* **Researchers** (privacy-safe datasets)
+
+
+## 📦 Output Formats
+
+* ✅ Redacted Document (PDF/JPG/PNG)
+* ✅ JSON / CSV Redaction Logs
+
+
+## 🧑‍🤝‍🧑 Team
+
+**Team ALL STARS**
+
+* Kroupa Shankar K
+* Prakriti Sharma A
+* Devadarisini S
+* Ishwarya A
+  
+✨ 
