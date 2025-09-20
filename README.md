@@ -122,6 +122,9 @@ npm start
 * ✅ Redacted Document (PDF/JPG/PNG)
 * ✅ JSON / CSV Redaction Logs
 
+📜 License
+
+This project is licensed under the MIT License.
 
 ## 🧑‍🤝‍🧑 Team
 
