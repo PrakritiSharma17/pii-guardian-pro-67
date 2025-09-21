@@ -494,36 +494,80 @@ export const PIIEncryptionFlow = () => {
                         {file.status === 'completed' && (
                           <div className="space-y-4">
                             <Separator />
+                            
+                            {/* Encryption Key Display - Always Visible */}
+                            <div className="p-4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg border">
+                              <div className="flex items-center justify-between mb-3">
+                                <h4 className="font-medium flex items-center">
+                                  <Key className="w-4 h-4 mr-2 text-primary" />
+                                  🔑 AES-256-GCM Encryption Key
+                                </h4>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => copyToClipboard(file.encryptionKey || '')}
+                                  className="h-7 px-2"
+                                >
+                                  <Copy className="w-3 h-3" />
+                                </Button>
+                              </div>
+                              
+                              <div className="space-y-3">
+                                <code className="text-xs bg-background/80 p-3 rounded block break-all font-mono border">
+                                  {file.encryptionKey}
+                                </code>
+                                
+                                <div className="flex items-start space-x-2">
+                                  <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                                  <div className="text-xs text-muted-foreground">
+                                    <p className="font-medium mb-1">⚠️ Critical: Store this key securely!</p>
+                                    <p>• This key is required to decrypt PII in your document</p>
+                                    <p>• Fingerprint: {file.keyFingerprint}</p>
+                                    <p>• Algorithm: AES-256-GCM with unique IV per encryption</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                             <div className="grid md:grid-cols-2 gap-4">
-                              <div className="bg-muted/30 p-4 rounded-lg">
-                                <h4 className="font-medium mb-2">🔑 Encryption Key</h4>
+                              <div className="bg-muted/30 p-4 rounded-lg border">
+                                <h4 className="font-medium mb-3 flex items-center">
+                                  <Download className="w-4 h-4 mr-2" />
+                                  📄 Export Key
+                                </h4>
                                 <div className="space-y-2">
-                                  <p className="text-xs text-muted-foreground">
-                                    Fingerprint: {file.keyFingerprint}
+                                  <p className="text-xs text-muted-foreground mb-3">
+                                    Export your encryption key in different formats for secure storage.
                                   </p>
-                                  <div className="flex space-x-2">
-                                    <Button size="sm" onClick={() => downloadKey(file, 'json')}>
-                                      <Download className="w-3 h-3 mr-1" />
-                                      Download Key
+                                  <div className="flex flex-col space-y-2">
+                                    <Button size="sm" onClick={() => downloadKey(file, 'json')} className="justify-start">
+                                      <Download className="w-3 h-3 mr-2" />
+                                      Export as JSON
                                     </Button>
-                                    <Button size="sm" variant="outline" onClick={() => copyToClipboard(file.encryptionKey || '')}>
-                                      <Copy className="w-3 h-3 mr-1" />
-                                      Copy
+                                    <Button size="sm" variant="outline" onClick={() => downloadKey(file, 'qr')} className="justify-start">
+                                      <QrCode className="w-3 h-3 mr-2" />
+                                      Generate QR Code
                                     </Button>
                                   </div>
                                 </div>
                               </div>
 
-                              <div className="bg-muted/30 p-4 rounded-lg">
-                                <h4 className="font-medium mb-2">📄 Encrypted File</h4>
+                              <div className="bg-muted/30 p-4 rounded-lg border">
+                                <h4 className="font-medium mb-3 flex items-center">
+                                  <FileText className="w-4 h-4 mr-2" />
+                                  📄 Download Encrypted File
+                                </h4>
                                 <div className="space-y-2">
-                                  <p className="text-xs text-muted-foreground">
-                                    PII Encrypted • Safe for Storage
+                                  <p className="text-xs text-muted-foreground mb-3">
+                                    Download your document with PII encrypted using AES-256-GCM.
                                   </p>
-                                  <Button size="sm" onClick={() => downloadEncryptedFile(file)}>
-                                    <Download className="w-3 h-3 mr-1" />
-                                    Download File
+                                  <Button size="sm" onClick={() => downloadEncryptedFile(file)} className="w-full justify-start">
+                                    <Download className="w-3 h-3 mr-2" />
+                                    Download Encrypted Document
                                   </Button>
+                                  <p className="text-xs text-muted-foreground">
+                                    ✅ Safe for storage • PII is encrypted
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -552,30 +596,77 @@ export const PIIEncryptionFlow = () => {
                   {files
                     .filter(f => f.status === 'completed' && f.encryptionKey)
                     .map((file) => (
-                      <div key={file.id} className="flex items-center justify-between p-4 border rounded-lg">
-                        <div>
-                          <p className="font-medium">{file.name}</p>
-                          <p className="text-sm text-muted-foreground">
-                            Fingerprint: {file.keyFingerprint} • {file.piiDetected} PII items
-                          </p>
+                      <div key={file.id} className="p-4 border rounded-lg space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium">{file.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              Fingerprint: {file.keyFingerprint} • {file.piiDetected} PII items encrypted
+                            </p>
+                          </div>
+                          <Badge variant="outline">🔒 AES-256-GCM</Badge>
                         </div>
-                        <div className="flex space-x-2">
+                        
+                        {/* Full Key Display */}
+                        <div className="p-4 bg-muted/30 rounded-lg border">
+                          <div className="flex items-center justify-between mb-2">
+                            <Label className="text-sm font-medium">🔑 Encryption Key</Label>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => copyToClipboard(file.encryptionKey || '')}
+                              className="h-6 px-2"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </Button>
+                          </div>
+                          <code className="text-xs bg-background p-3 rounded block break-all font-mono border">
+                            {file.encryptionKey}
+                          </code>
+                          <div className="flex items-center space-x-2 mt-2">
+                            <AlertTriangle className="w-4 h-4 text-amber-500" />
+                            <p className="text-xs text-muted-foreground">
+                              Store securely - required for decryption
+                            </p>
+                          </div>
+                        </div>
+                        
+                        {/* Action Buttons */}
+                        <div className="flex flex-wrap gap-2">
                           <Button size="sm" variant="outline" onClick={() => downloadKey(file, 'json')}>
                             <Download className="w-3 h-3 mr-1" />
-                            JSON
+                            Export JSON
                           </Button>
                           <Button size="sm" variant="outline" onClick={() => downloadKey(file, 'qr')}>
                             <QrCode className="w-3 h-3 mr-1" />
                             QR Code
+                          </Button>
+                          <Button size="sm" variant="outline" onClick={() => downloadEncryptedFile(file)}>
+                            <FileText className="w-3 h-3 mr-1" />
+                            Download File
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="default"
+                            onClick={() => {
+                              setDecryptDocumentId(file.documentId || '');
+                              setDecryptionKey(file.encryptionKey || '');
+                              setActiveTab('decrypt');
+                            }}
+                          >
+                            <Unlock className="w-3 h-3 mr-1" />
+                            Decrypt
                           </Button>
                         </div>
                       </div>
                     ))}
                   
                   {files.filter(f => f.status === 'completed').length === 0 && (
-                    <p className="text-center text-muted-foreground py-8">
-                      No encryption keys available. Upload and process documents first.
-                    </p>
+                    <div className="text-center py-12 text-muted-foreground">
+                      <Key className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                      <h3 className="text-lg font-medium mb-2">No Encryption Keys Available</h3>
+                      <p>Upload and process documents first to generate encryption keys.</p>
+                    </div>
                   )}
                 </CardContent>
               </Card>
@@ -593,47 +684,116 @@ export const PIIEncryptionFlow = () => {
                     Use your encryption key to decrypt PII data from processed documents.
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="documentId">Document ID</Label>
-                      <Input
-                        id="documentId"
-                        placeholder="Enter document ID"
-                        value={decryptDocumentId}
-                        onChange={(e) => setDecryptDocumentId(e.target.value)}
-                      />
+                <CardContent className="space-y-6">
+                  {/* Quick Select from Processed Documents */}
+                  {files.filter(f => f.status === 'completed').length > 0 && (
+                    <div className="space-y-3">
+                      <Label className="text-base font-medium">📁 Select from Your Documents</Label>
+                      <div className="grid gap-3">
+                        {files.filter(f => f.status === 'completed').map((file) => (
+                          <div
+                            key={file.id}
+                            className={cn(
+                              "p-4 border rounded-lg cursor-pointer transition-all hover:border-primary/50",
+                              decryptDocumentId === file.documentId && decryptionKey === file.encryptionKey
+                                ? "border-primary bg-primary/5"
+                                : "hover:bg-muted/30"
+                            )}
+                            onClick={() => {
+                              setDecryptDocumentId(file.documentId || '');
+                              setDecryptionKey(file.encryptionKey || '');
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium">{file.name}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  ID: {file.documentId} • {file.piiDetected} PII items • Key: {file.keyFingerprint}
+                                </p>
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                {getRiskBadge(file.riskScore || 0, file.status)}
+                                {decryptDocumentId === file.documentId && (
+                                  <CheckCircle className="w-4 h-4 text-primary" />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <Separator />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="encryptionKey">Encryption Key (Base64)</Label>
-                      <Input
-                        id="encryptionKey"
-                        type="password"
-                        placeholder="Paste your encryption key"
-                        value={decryptionKey}
-                        onChange={(e) => setDecryptionKey(e.target.value)}
-                      />
+                  )}
+                  
+                  {/* Manual Input */}
+                  <div className="space-y-4">
+                    <Label className="text-base font-medium">🔧 Manual Input</Label>
+                    <div className="grid gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="documentId">Document ID</Label>
+                        <Input
+                          id="documentId"
+                          placeholder="Enter document ID to decrypt"
+                          value={decryptDocumentId}
+                          onChange={(e) => setDecryptDocumentId(e.target.value)}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="encryptionKey">AES-256-GCM Encryption Key (Base64)</Label>
+                        <Textarea
+                          id="encryptionKey"
+                          placeholder="Paste your encryption key here..."
+                          value={decryptionKey}
+                          onChange={(e) => setDecryptionKey(e.target.value)}
+                          rows={3}
+                          className="font-mono text-sm"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          Enter the base64-encoded encryption key from your key export
+                        </p>
+                      </div>
                     </div>
                   </div>
                   
-                  <Button onClick={decryptDocument} disabled={!decryptDocumentId || !decryptionKey}>
-                    <Unlock className="w-4 h-4 mr-2" />
-                    Decrypt Document
+                  <Button 
+                    onClick={decryptDocument} 
+                    disabled={!decryptDocumentId || !decryptionKey}
+                    className="w-full"
+                    size="lg"
+                  >
+                    <Unlock className="w-5 h-5 mr-2" />
+                    Decrypt Document & Restore PII
                   </Button>
 
+                  {/* Decrypted Content Display */}
                   {decryptedContent && (
-                    <div className="space-y-2">
-                      <Label htmlFor="decryptedContent">Decrypted Content</Label>
-                      <Textarea
-                        id="decryptedContent"
-                        value={decryptedContent}
-                        readOnly
-                        className="min-h-[200px] font-mono text-sm"
-                      />
-                      <Button variant="outline" onClick={() => copyToClipboard(decryptedContent)}>
-                        <Copy className="w-4 h-4 mr-2" />
-                        Copy Decrypted Content
-                      </Button>
+                    <div className="space-y-4">
+                      <Separator />
+                      <div className="flex items-center justify-between">
+                        <Label className="text-base font-medium flex items-center">
+                          <CheckCircle className="w-5 h-5 mr-2 text-green-500" />
+                          🔓 Decrypted Content
+                        </Label>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => copyToClipboard(decryptedContent)}
+                        >
+                          <Copy className="w-4 h-4 mr-2" />
+                          Copy All
+                        </Button>
+                      </div>
+                      <div className="p-4 bg-muted/30 rounded-lg border max-h-96 overflow-y-auto">
+                        <pre className="text-sm whitespace-pre-wrap font-mono">
+                          {decryptedContent}
+                        </pre>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm">
+                        <CheckCircle className="w-4 h-4 text-green-500" />
+                        <span className="text-muted-foreground">
+                          PII successfully decrypted and restored in the document above
+                        </span>
+                      </div>
                     </div>
                   )}
                 </CardContent>
