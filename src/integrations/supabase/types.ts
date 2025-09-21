@@ -96,10 +96,13 @@ export type Database = {
         Row: {
           confidence_score: number | null
           created_at: string
+          encryption_key_id: string | null
+          encryption_metadata: Json | null
           file_size: number
           file_type: string
           filename: string
           id: string
+          is_encrypted: boolean | null
           original_filename: string
           pages_processed: number | null
           processing_completed_at: string | null
@@ -114,10 +117,13 @@ export type Database = {
         Insert: {
           confidence_score?: number | null
           created_at?: string
+          encryption_key_id?: string | null
+          encryption_metadata?: Json | null
           file_size: number
           file_type: string
           filename: string
           id?: string
+          is_encrypted?: boolean | null
           original_filename: string
           pages_processed?: number | null
           processing_completed_at?: string | null
@@ -132,10 +138,13 @@ export type Database = {
         Update: {
           confidence_score?: number | null
           created_at?: string
+          encryption_key_id?: string | null
+          encryption_metadata?: Json | null
           file_size?: number
           file_type?: string
           filename?: string
           id?: string
+          is_encrypted?: boolean | null
           original_filename?: string
           pages_processed?: number | null
           processing_completed_at?: string | null
@@ -148,6 +157,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      encryption_keys: {
+        Row: {
+          algorithm: string
+          created_at: string
+          document_id: string
+          downloaded_at: string | null
+          id: string
+          key_fingerprint: string
+          user_id: string
+        }
+        Insert: {
+          algorithm?: string
+          created_at?: string
+          document_id: string
+          downloaded_at?: string | null
+          id?: string
+          key_fingerprint: string
+          user_id: string
+        }
+        Update: {
+          algorithm?: string
+          created_at?: string
+          document_id?: string
+          downloaded_at?: string | null
+          id?: string
+          key_fingerprint?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_encryption_keys_document"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pii_detections: {
         Row: {
@@ -189,6 +236,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "pii_detections_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      processed_files: {
+        Row: {
+          created_at: string
+          document_id: string
+          encrypted_storage_path: string
+          id: string
+          original_storage_path: string
+          processing_metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          document_id: string
+          encrypted_storage_path: string
+          id?: string
+          original_storage_path: string
+          processing_metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          document_id?: string
+          encrypted_storage_path?: string
+          id?: string
+          original_storage_path?: string
+          processing_metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_processed_files_document"
             columns: ["document_id"]
             isOneToOne: false
             referencedRelation: "documents"

@@ -1,1 +1,10 @@
 project_id = "euqkqumddclwkcelnnnk"
+
+[functions.process-document]
+verify_jwt = false
+
+[functions.download-key]
+verify_jwt = false
+
+[functions.decrypt-document]
+verify_jwt = false

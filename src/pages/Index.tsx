@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { EnhancedUploadZone } from "@/components/enhanced/EnhancedUploadZone";
+import { PIIEncryptionFlow } from "@/components/encryption/PIIEncryptionFlow";
 import { Features } from "@/components/Features";
 
 const Index = () => {
@@ -9,7 +9,7 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        <EnhancedUploadZone />
+        <PIIEncryptionFlow />
         <Features />
       </main>
     </div>
